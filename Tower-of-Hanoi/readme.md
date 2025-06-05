@@ -107,11 +107,8 @@ towerOfHanoi(3, A, C, B)
 * **Time Complexity**: `O(2^n)` – Exponential growth with each additional disk.
 * **Space Complexity**: `O(n)` – Due to the recursion stack.
 
----
 
-## 🙌 Wrap Up
 
-Tower of Hanoi is a classic recursive puzzle that helps build deep understanding of how recursion works and how problems can be broken down into subproblems. Play with the number of disks and see the pattern!
 
 ```
 
