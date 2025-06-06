@@ -4,6 +4,8 @@ package TripleStep;
 // steps at a time, implement a method to count how many possible ways the child can run up the
 // stairs.
 public class TripleStep {
+
+    // THIS IS AN RECURSIVE APPROACH
     // public static int tripleStep(int n) {
     //     if(n<0){
     //         return 0;
@@ -15,6 +17,8 @@ public class TripleStep {
     //     }
     // }
 
+
+    // THIS IS AN ITERATIVE APPROACH
     public static int tripleStep(int n) {
     if (n < 0) return 0;
     if (n == 0 || n == 1) return 1;
