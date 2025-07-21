@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Animated Scene</title>
+    <!-- Google Fonts - Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background: #000;
+            overflow: hidden;
+            font-family: 'Inter', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+
+        /* The main container for the animation */
+        .outer {
+            height: 150px;
+            width: 500px;
+            border: 2px solid #333;
+            position: relative;
+            overflow: hidden;
+            margin: 50px auto;
+            border-radius: 10px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+            background-color: #00bbff;
+        }
+
+        /* The wrapper for the animated elements */
+        .loop-wrapper {
+            margin: 0;
+            position: absolute;
+            display: block;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            border-bottom: 3px solid #000000;
+            color: #000000;
+        }
+
+        /* Mountain elements */
+        .mountain {
+            position: absolute;
+            right: -1350px;
+            bottom: -20px;
+            width: 2px;
+            height: 2px;
+            box-shadow:
+                0 0 0 75px #000000,
+                90px 80px 0 105px #000000,
+                135px 144px 0 75px #000000,
+                375px 400px 0 75px #000000,
+                435px 512px 0 75px #000000,
+                480px 640px 0 75px #000000;
+            transform: rotate(130deg);
+            animation: mtn 20s linear infinite;
+        }
+
+        /* Hill elements */
+        .hill {
+            position: absolute;
+            right: -1350px;
+            bottom: -50px;
+            width: 600px;
+            border-radius: 50%;
+            height: 32px;
+            box-shadow:
+                0 0 0 75px #000000,
+                -30px 0 0 30px #000000,
+                -135px 0 0 75px #000000,
+                375px 0 0 75px #000000,
+                435px 0 0 75px #000000,
+                930px 0 0 75px #000000;
+            animation: hill 4s 2s linear infinite;
+        }
+
+
+
+        /* Rock element */
+
+        /* Bike container - holds the SVG bike */
+        .bike-container {
+            position: absolute;
+            width: 180px;
+            /* Adjusted width for the SVG bike */
+            height: 50px;
+            /* Adjusted height for the SVG bike */
+            bottom: 0px;
+            right: 50%;
+            margin-right: -90px;
+            /* Center the bike relative to its width */
+            animation: bike-bounce 4s 0.080s ease infinite;
+            /* Apply bounce animation */
+            transform-origin: bottom center;
+            /* Pivot for bounce */
+            z-index: 5;
+            /* Ensure bike is on top of other elements */
+            color: #fdd835;
+            /* Set the stroke color for the SVG */
+            display: flex;
+            /* Use flexbox to center SVG */
+            justify-content: center;
+            align-items: center;
+            overflow: visible;
+            /* Allow SVG content to extend beyond container if needed */
+        }
+
+        /* SVG styling within the container */
+        .bike-container svg {
+            width: 100%;
+            height: 100%;
+            display: block;
+            /* Remove extra space below SVG */
+            /* The SVG itself has a transform to flip it, so no need for scaleX(-1) here */
+        }
+
+        /* Animation timings */
+        .tree1 {
+            animation: tree 3s linear infinite;
+        }
+
+        .tree2 {
+            animation: tree2 2s 0.15s linear infinite;
+        }
+
+        .tree3 {
+            animation: tree3 8s 0.05s linear infinite;
+        }
+
+        .tree {
+            transform-origin: bottom center;
+        }
+
+
+
+
+        /* Keyframe animations */
+        @keyframes tree {
+            0% {
+                transform: translateX(2025px) scale(1.5);
+            }
+
+            100% {
+                transform: translateX(-75px) scale(1.5);
+            }
+        }
+
+
+        @keyframes tree2 {
+            0% {
+                transform: translate(975px);
+            }
+
+            50% {}
+
+            100% {
+                transform: translate(-75px);
+            }
+        }
+
+
+
+        @keyframes tree3 {
+            0% {
+                transform: translate(4125px);
+            }
+
+            50% {}
+
+            100% {
+                transform: translate(-75px);
+            }
+        }
+
+
+
+        @keyframes mtn {
+            100% {
+                transform: translateX(-3000px) rotate(130deg);
+            }
+        }
+
+        .tree-container {
+            position: absolute;
+            bottom: 0;
+            height: 150px;
+            width: 52.5px;
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+            overflow: visible;
+        }
+
+        @keyframes hill {
+            100% {
+                transform: translateX(-3000px);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="outer">
+        <div class="loop-wrapper">
+            <div class="mountain"></div>
+            <div class="hill"></div>
+            <!-- Replace the original .tree divs with this -->
+            <div class="tree-container">
+                <svg class="tree tree1" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+                    <path fill="#000"
+                        d="M55.639,46.344L35.641,2.342c-0.648-1.426-2.07-2.344-3.642-2.344c-1.57,0-2.992,0.918-3.641,2.344 
+       l-20,44.001c-0.562,1.238-0.457,2.68,0.277,3.82C9.374,51.309,10.64,52,11.999,52h16v8c0,2.211,1.789,4,4,4 
+       C34.211,64,36,62.211,36,60v-8h15.998c1.359,0,2.625-0.691,3.367-1.836C56.1,49.023,56.201,47.582,55.639,46.344z" />
+                </svg>
+            </div>
+
+
+            <div class="tree-container">
+                <svg class="tree tree2" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+                    <path fill="#000"
+                        d="M55.639,46.344L35.641,2.342c-0.648-1.426-2.07-2.344-3.642-2.344c-1.57,0-2.992,0.918-3.641,2.344 
+       l-20,44.001c-0.562,1.238-0.457,2.68,0.277,3.82C9.374,51.309,10.64,52,11.999,52h16v8c0,2.211,1.789,4,4,4 
+       C34.211,64,36,62.211,36,60v-8h15.998c1.359,0,2.625-0.691,3.367-1.836C56.1,49.023,56.201,47.582,55.639,46.344z" />
+                </svg>
+            </div>
+            <div class="tree-container">
+                <svg class="tree tree3" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+                    <path fill="#000"
+                        d="M55.639,46.344L35.641,2.342c-0.648-1.426-2.07-2.344-3.642-2.344c-1.57,0-2.992,0.918-3.641,2.344 
+       l-20,44.001c-0.562,1.238-0.457,2.68,0.277,3.82C9.374,51.309,10.64,52,11.999,52h16v8c0,2.211,1.789,4,4,4 
+       C34.211,64,36,62.211,36,60v-8h15.998c1.359,0,2.625-0.691,3.367-1.836C56.1,49.023,56.201,47.582,55.639,46.344z" />
+                </svg>
+            </div>
+
+            <div class="bike-container">
+                <svg width="100%" height="100%" viewBox="0 0 122.88 35.03" xmlns="http://www.w3.org/2000/svg">
+                    <g transform="scale(-1,1) translate(-122.88,0)">
+                        <path fill="none" stroke="white" stroke-width="2" d="M99.42,13.57c5.93,0,10.73,4.8,10.73,10.73c0,5.93-4.8,10.73-10.73,10.73
+                            s-10.73-4.8-10.73-10.73C88.69,18.37,93.49,13.57,99.42,13.57L99.42,13.57z M79.05,5c-0.59,1.27-1.06,2.69-1.42,4.23
+                            c-0.82,2.57,0.39,3.11,3.19,2.06c2.06-1.23,4.12-2.47,6.18-3.7c1.05-0.74,1.55-1.47,1.38-2.19c-0.34-1.42-3.08-2.16-5.33-2.6
+                            C80.19,2.23,80.39,2.11,79.05,5L79.05,5z M23.86,19.31c2.75,0,4.99,2.23,4.99,4.99c0,2.75-2.23,4.99-4.99,4.99
+                            c-2.75,0-4.99-2.23-4.99-4.99C18.87,21.54,21.1,19.31,23.86,19.31L23.86,19.31z M99.42,19.31c2.75,0,4.99,2.23,4.99,4.99
+                            c0,2.75-2.23,4.99-4.99,4.99c-2.75,0-4.99-2.23-4.99-4.99C94.43,21.54,96.66,19.31,99.42,19.31L99.42,19.31z M46.14,12.5
+                            c2.77-2.97,5.97-4.9,9.67-6.76c8.1-4.08,13.06-3.58,21.66-3.58l-2.89,7.5c-1.21,1.6-2.58,2.73-4.66,2.84H46.14L46.14,12.5z
+                            M23.86,13.57c5.93,0,10.73,4.8,10.73,10.73c0,5.93-4.8,10.73-10.73,10.73s-10.73-4.8-10.73-10.73
+                            C13.13,18.37,17.93,13.57,23.86,13.57L23.86,13.57z M40.82,10.3c3.52-2.19,7.35-4.15,11.59-5.82
+                            c12.91-5.09,22.78-6,36.32-1.9c4.08,1.55,8.16,3.1,12.24,4.06c4.03,0.96,21.48,1.88,21.91,4.81l-4.31,5.15
+                            c1.57,1.36,2.85,3.03,3.32,5.64c-0.13,1.61-0.57,2.96-1.33,4.04c-1.29,1.85-5.07,3.76-7.11,2.67
+                            c-0.65-0.35-1.02-1.05-1.01-2.24c0.06-23.9-28.79-21.18-26.62,2.82H35.48C44.8,5.49,5.04,5.4,12.1,28.7
+                            C9.62,31.38,3.77,27.34,0,18.75c1.03-1.02,2.16-1.99,3.42-2.89c-0.06-0.05,0.06,0.19-0.15-0.17c-0.21-0.36,0.51-1.87,1.99-2.74
+                            C13.02,8.4,31.73,8.52,40.82,10.3L40.82,10.3z" />
+                    </g>
+                </svg>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
