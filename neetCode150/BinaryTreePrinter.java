@@ -3,6 +3,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 
+import javax.sound.sampled.Line;
+
 class TreeNode {
     int data;
     TreeNode left, right;
@@ -13,43 +15,23 @@ class TreeNode {
 }
 
 class Tree {
+
     private int size = 0;
     private TreeNode root = null;
 
+    // Constructors
     public Tree() {
+
     }
 
     public Tree(int val) {
-        root = new TreeNode(val);
+        this.root = new TreeNode(val);
         size++;
     }
 
-    // --- Public Methods ---
-
+    // Public Methods
     public int size() {
         return size;
-    }
-
-    public boolean contains(int value) {
-        return containsHelper(root, value);
-    }
-
-    public List<Integer> inOrder() {
-        List<Integer> arr = new ArrayList<>();
-        inOrderHelper(root, arr);
-        return arr;
-    }
-
-    public List<Integer> preOrder() {
-        List<Integer> arr = new ArrayList<>();
-        preOrderHelper(root, arr);
-        return arr;
-    }
-
-    public List<Integer> postOrder() {
-        List<Integer> arr = new ArrayList<>();
-        postOrderHelper(root, arr);
-        return arr;
     }
 
     public void addLeft(int val) {
@@ -70,10 +52,6 @@ class Tree {
         size++;
     }
 
-    public void prettyPrint() {
-        prettyPrintHelper(root, "", true);
-    }
-
     public void add(int val) {
         if (root != null) {
             addHelper(val);
@@ -81,6 +59,46 @@ class Tree {
             root = new TreeNode(val);
         }
         size++;
+    }
+
+    public void print() {
+        printHelper(root, "", true);
+    }
+
+    public List<Integer> inOrder() {
+        if (root == null)
+            return new ArrayList<>();
+        return inOrderHelper(root, new ArrayList<>());
+    }
+
+    public List<Integer> preOrder() {
+        if (root == null)
+            return new ArrayList<>();
+        return preOrderHelper(root, new ArrayList<>());
+    }
+
+    public List<Integer> postOrder() {
+        if (root == null)
+            return new ArrayList<>();
+        return postOrderHelper(root, new ArrayList<>());
+    }
+
+    public List<Integer> revInOrder() {
+        if (root == null)
+            return new ArrayList<>();
+        return revInOrderHelper(root, new ArrayList<>());
+    }
+
+    public List<Integer> revPreOrder() {
+        if (root == null)
+            return new ArrayList<>();
+        return revPreOrderHelper(root, new ArrayList<>());
+    }
+
+    public List<Integer> revPostOrder() {
+        if (root == null)
+            return new ArrayList<>();
+        return revPostOrderHelper(root, new ArrayList<>());
     }
 
     public List<Integer> levelOrder() {
@@ -91,79 +109,97 @@ class Tree {
         List<Integer> arr = new ArrayList<>();
         queue.offer(root);
         while (!queue.isEmpty()) {
-            TreeNode current = queue.poll();
-            arr.add(current.data);
-            if (current.left != null) {
-                queue.offer(current.left);
+            TreeNode curr = queue.poll();
+            arr.add(curr.data);
+            if (curr.left != null) {
+                queue.add(curr.left);
             }
-            if (current.right != null) {
-                queue.offer(current.right);
+            if (curr.right != null) {
+                queue.add(curr.right);
             }
         }
         return arr;
     }
-    public int height(){
-        return heightHelper(root);
+
+    public List<List<Integer>> levelOrderByLevel() {
+        if (root == null) {
+            return new ArrayList<>();
+        }
+        List<List<Integer>> arr = new ArrayList<>();
+        Queue<TreeNode> queue = new LinkedList<>();
+        queue.offer(root);
+        while (!queue.isEmpty()) {
+            int level = queue.size();
+            List<Integer> list = new ArrayList<>();
+            for (int i = 0; i < level; i++) {
+                TreeNode curr = queue.poll();
+                list.add(curr.data);
+                if (curr.left != null) {
+                    queue.add(curr.left);
+                }
+                if (curr.right != null) {
+                    queue.add(curr.right);
+                }
+            }
+            arr.add(list);
+        }
+        return arr;
     }
 
-    // --- Private Helper Methods ---
+    public int height() {
+        return heightHelper(root, 0);
+    }
+
+    public boolean contains(int val){
+        return containshelper(root,val);
+    }
+
+    private boolean containshelper(TreeNode node, int val) {
+        if(node==null){
+            return false;
+        }
+        if(node.data==val){
+            return true;
+        }
+        return containshelper(node.left, val) || containshelper(node.right, val);
+    }
+
+    // Private Helper Methods
+    private int heightHelper(TreeNode node, int h) {
+        if (node == null) {
+            return h;
+        }
+        return 1 + Math.max(heightHelper(node.left, h), heightHelper(node.right, h));
+    }
 
     private void addHelper(int val) {
         Queue<TreeNode> queue = new LinkedList<>();
         queue.offer(root);
-        while(!queue.isEmpty()){
-            TreeNode current = queue.poll();
-            if(current.left==null){
-                current.left = new TreeNode(val);
+        while (!queue.isEmpty()) {
+            TreeNode curr = queue.poll();
+            if (curr.left == null) {
+                curr.left = new TreeNode(val);
                 return;
-            }else if(current.right == null){
-                current.right = new TreeNode(val);
+            } else if (curr.right == null) {
+                curr.right = new TreeNode(val);
                 return;
             }
-            if (current.left != null) {
-                queue.offer(current.left);
+            if (curr.left != null) {
+                queue.add(curr.left);
             }
-            if (current.right != null) {
-                queue.offer(current.right);
+            if (curr.right != null) {
+                queue.add(curr.right);
             }
         }
     }
 
-    private boolean containsHelper(TreeNode node, int val) {
-        if (node == null) {
-            return false;
-        }
-        if (node.data == val) {
-            return true;
-        }
-        return containsHelper(node.left, val) || containsHelper(node.right, val);
-    }
-
-    private void inOrderHelper(TreeNode node, List<Integer> arr) {
+    private void printHelper(TreeNode node, String prefix, boolean isLeft) {
         if (node == null) {
             return;
         }
-        inOrderHelper(node.left, arr);
-        arr.add(node.data);
-        inOrderHelper(node.right, arr);
-    }
-
-    private void preOrderHelper(TreeNode node, List<Integer> arr) {
-        if (node == null) {
-            return;
-        }
-        arr.add(node.data);
-        preOrderHelper(node.left, arr);
-        preOrderHelper(node.right, arr);
-    }
-
-    private void postOrderHelper(TreeNode node, List<Integer> arr) {
-        if (node == null) {
-            return;
-        }
-        postOrderHelper(node.left, arr);
-        postOrderHelper(node.right, arr);
-        arr.add(node.data);
+        printHelper(node.right, prefix + (isLeft ? "|   " : "    "), false);
+        System.out.println(prefix + (isLeft ? "└── " : "┌── ") + node.data);
+        printHelper(node.left, prefix + (isLeft ? "    " : "|   "), true);
     }
 
     private void addLeftHelper(TreeNode node, int val) {
@@ -182,67 +218,127 @@ class Tree {
         addRightHelper(node.right, val);
     }
 
-    private void prettyPrintHelper(TreeNode node, String prefix, boolean isLeft) {
+    private List<Integer> inOrderHelper(TreeNode node, List<Integer> arr) {
         if (node == null) {
-            return;
+            return arr;
         }
-        prettyPrintHelper(node.right, prefix + (isLeft ? "|   " : "    "), false);
-        System.out.println(prefix + (isLeft ? "└── " : "┌── ") + node.data);
-        prettyPrintHelper(node.left, prefix + (isLeft ? "    " : "|   "), true);
+        inOrderHelper(node.left, arr);
+        arr.add(node.data);
+        inOrderHelper(node.right, arr);
+        return arr;
     }
 
-    private int heightHelper(TreeNode node){
-        if(node==null){
-            return 0;
+    private List<Integer> preOrderHelper(TreeNode node, List<Integer> arr) {
+        if (node == null) {
+            return arr;
         }
-        return 1+Math.max(heightHelper(node.left), heightHelper(node.right));
+        arr.add(node.data);
+        preOrderHelper(node.left, arr);
+        preOrderHelper(node.right, arr);
+        return arr;
+    }
+
+    private List<Integer> postOrderHelper(TreeNode node, List<Integer> arr) {
+        if (node == null) {
+            return arr;
+        }
+        postOrderHelper(node.left, arr);
+        postOrderHelper(node.right, arr);
+        arr.add(node.data);
+        return arr;
+    }
+
+    private List<Integer> revInOrderHelper(TreeNode node, List<Integer> arr) {
+        if (node == null) {
+            return arr;
+        }
+        revInOrderHelper(node.right, arr);
+        arr.add(node.data);
+        revInOrderHelper(node.left, arr);
+        return arr;
+    }
+
+    private List<Integer> revPreOrderHelper(TreeNode node, List<Integer> arr) {
+        if (node == null) {
+            return arr;
+        }
+        revPreOrderHelper(node.right, arr);
+        revPreOrderHelper(node.left, arr);
+        arr.add(node.data);
+        return arr;
+    }
+
+    private List<Integer> revPostOrderHelper(TreeNode node, List<Integer> arr) {
+        if (node == null) {
+            return arr;
+        }
+        arr.add(node.data);
+        revPostOrderHelper(node.right, arr);
+        revPostOrderHelper(node.left, arr);
+        return arr;
     }
 }
 
-
-
 public class BinaryTreePrinter {
     public static void section(String msg) {
-        System.out.println("\n-------------------------------------" + msg + "-------------------------------------");
+        System.out.println("-----------------------------------" + msg + "-------------------------------------------");
     }
 
     public static void main(String[] args) {
+        long start = System.currentTimeMillis();
+
         Tree tree = new Tree();
         tree.add(10);
         tree.add(20);
         tree.add(30);
-
         tree.add(40);
         tree.add(50);
         tree.add(60);
-        
         tree.add(70);
         tree.add(80);
 
-        
-        section("PRETTY PRINT");
-        tree.prettyPrint();
-        section("HEIGHT");
-        System.out.println(tree.height());
-        
-        section("SIZE OF TREE");
+        section("PRETTY PRINTING THE TREE");
+        tree.print();
+
+        section("SIZE OF THE TREE");
         System.out.println(tree.size());
-        
-        section("InOrder");
-        System.out.println(tree.inOrder());
 
-        section("PreOrder");
-        System.out.println(tree.preOrder());
+        section("INORDER TRAVERSAL");
+        System.out.println(tree.inOrder()); 
 
-        section("PostOrder");
-        System.out.println(tree.postOrder());
+        section("PREORDER TRAVERSAL");
+        System.out.println(tree.preOrder()); 
 
-        section("LevelOrder");
+        section("POSTORDER TRAVERSAL");
+        System.out.println(tree.postOrder()); 
+
+        section("REVERSE INORDER TRAVERSAL");
+        System.out.println(tree.revInOrder()); 
+
+        section("REVERSE PREORDER TRAVERSAL");
+        System.out.println(tree.revPreOrder()); 
+
+        section("REVERSE POSTORDER TRAVERSAL");
+        System.out.println(tree.revPostOrder());
+
+        section("LEVEL ORDER TRAVERSAL");
         System.out.println(tree.levelOrder());
 
-        section("Contains");
+        section("LEVEL ORDER TRAVERSAL");
+        System.out.println(tree.levelOrderByLevel());
+
+        section("HEIGHT OF THE TREE");
+        System.out.println(tree.height());
+
+        section("CONTAINS");
         System.out.println(tree.contains(4));
         System.out.println(tree.contains(10));
         System.out.println(tree.contains(99));
+        System.out.println(tree.contains(40));
+        System.out.println(tree.contains(80));
+
+        section("TOTAL TIME TAKEN");
+        System.out.println("Total execution time: " + (System.currentTimeMillis() - start) + " ms");
     }
+
 }
