@@ -3,8 +3,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 
-import javax.sound.sampled.Line;
-
 class TreeNode {
     int data;
     TreeNode left, right;
@@ -150,21 +148,110 @@ class Tree {
         return heightHelper(root, 0);
     }
 
-    public boolean contains(int val){
-        return containshelper(root,val);
+    public boolean contains(int val) {
+        return containshelper(root, val);
+    }
+
+    public boolean delete(int val) {
+        if (root == null)
+            return false;
+
+        if (root.left == null && root.right == null) {
+            if (root.data == val) {
+                root = null;
+                return true;
+            }
+            return false;
+        }
+
+        Queue<TreeNode> queue = new LinkedList<>();
+        queue.offer(root);
+
+        TreeNode keyNode = null;
+        TreeNode lastNode = null;
+        TreeNode parentOfLast = null;
+
+        while (!queue.isEmpty()) {
+            TreeNode curr = queue.poll();
+
+            if (curr.data == val) {
+                keyNode = curr;
+            }
+
+            if (curr.left != null) {
+                parentOfLast = curr;
+                lastNode = curr.left;
+                queue.offer(curr.left);
+            }
+
+            if (curr.right != null) {
+                parentOfLast = curr;
+                lastNode = curr.right;
+                queue.offer(curr.right);
+            }
+        }
+
+        if (keyNode != null && lastNode != null) {
+            keyNode.data = lastNode.data; // Copy deepest node value
+
+            // Delete the deepest node
+            if (parentOfLast.left == lastNode) {
+                parentOfLast.left = null;
+            } else if (parentOfLast.right == lastNode) {
+                parentOfLast.right = null;
+            }
+            size--;
+            return true;
+        }
+
+        return false;
+    }
+
+    public int countNodes() {
+        size = countNodesHelper(root, 0);
+        return size;
+    }
+
+    public TreeNode maximumNode() {
+        return maximumNodeHelper(root);
+    }
+
+    private TreeNode maximumNodeHelper(TreeNode node) {
+        if (node == null)
+            return null;
+
+        TreeNode leftMax = maximumNodeHelper(node.left);
+        TreeNode rightMax = maximumNodeHelper(node.right);
+
+        TreeNode max = node;
+
+        if (leftMax != null && leftMax.data > max.data) {
+            max = leftMax;
+        }
+
+        if (rightMax != null && rightMax.data > max.data) {
+            max = rightMax;
+        }
+
+        return max;
+    }
+
+    private int countNodesHelper(TreeNode node, int val) {
+        if (node == null)
+            return val;
+        return 1 + countNodesHelper(node.left, val) + countNodesHelper(node.right, val);
     }
 
     private boolean containshelper(TreeNode node, int val) {
-        if(node==null){
+        if (node == null) {
             return false;
         }
-        if(node.data==val){
+        if (node.data == val) {
             return true;
         }
         return containshelper(node.left, val) || containshelper(node.right, val);
     }
 
-    // Private Helper Methods
     private int heightHelper(TreeNode node, int h) {
         if (node == null) {
             return h;
@@ -304,19 +391,19 @@ public class BinaryTreePrinter {
         System.out.println(tree.size());
 
         section("INORDER TRAVERSAL");
-        System.out.println(tree.inOrder()); 
+        System.out.println(tree.inOrder());
 
         section("PREORDER TRAVERSAL");
-        System.out.println(tree.preOrder()); 
+        System.out.println(tree.preOrder());
 
         section("POSTORDER TRAVERSAL");
-        System.out.println(tree.postOrder()); 
+        System.out.println(tree.postOrder());
 
         section("REVERSE INORDER TRAVERSAL");
-        System.out.println(tree.revInOrder()); 
+        System.out.println(tree.revInOrder());
 
         section("REVERSE PREORDER TRAVERSAL");
-        System.out.println(tree.revPreOrder()); 
+        System.out.println(tree.revPreOrder());
 
         section("REVERSE POSTORDER TRAVERSAL");
         System.out.println(tree.revPostOrder());
@@ -336,6 +423,15 @@ public class BinaryTreePrinter {
         System.out.println(tree.contains(99));
         System.out.println(tree.contains(40));
         System.out.println(tree.contains(80));
+
+        section("Delete Node");
+        System.out.println(tree.delete(80));
+
+        section("New Tree");
+        tree.print();
+
+        section("Size");
+        System.out.println(tree.countNodes());
 
         section("TOTAL TIME TAKEN");
         System.out.println("Total execution time: " + (System.currentTimeMillis() - start) + " ms");
